@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Branch Inventory | Moni Dresses Admin</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#b3006a", surface: "#f8fafc", panel: "#0f172a" },
+          fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface text-zinc-900 font-sans min-h-screen flex overflow-hidden">
+
+  <!-- ========================================== -->
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <!-- ========================================== -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-panel/60 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+
+  <!-- ========================================== -->
+  <!-- 🗂️ LEFT SIDEBAR (NAVIGATION MENU) -->
+  <!-- ========================================== -->
+  <aside id="sidebar" class="w-72 bg-panel text-white min-h-screen fixed left-0 top-0 h-full flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto">
+    
+    <div class="p-5 flex items-center justify-between border-b border-zinc-800 sticky top-0 bg-panel z-10">
+      <h1 class="text-lg font-extrabold text-white tracking-wider flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">storefront</span> MONI DRESSES
+      </h1>
+      <button onclick="toggleSidebar()" class="lg:hidden text-zinc-400 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-1">
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-3">Main Menu</p>
+      
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+      </a>
+      <a href="orders.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">shopping_bag</span> Orders & Tracking
+      </a>
+      <a href="products.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">inventory_2</span> Product Management
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">B2B & Branches</p>
+      
+      <a href="b2b.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">domain</span> B2B Portal & Orders
+      </a>
+      
+      <!-- Active Menu Item (Branches) -->
+      <a href="branches.html" class="flex items-center gap-3 px-3 py-3 bg-primary text-white rounded-xl font-bold text-xs transition shadow-lg shadow-primary/20">
+        <span class="material-symbols-outlined text-[18px]">store</span> Branch Inventory
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Marketing & Users</p>
+      <a href="customers.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">group</span> Customer Details
+      </a>
+      <a href="sms.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">sms</span> Bulk SMS Send
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Settings & Design</p>
+      <a href="theme.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">palette</span> Website Design (UI)
+      </a>
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">settings</span> Setup (Payment, Shiprocket)
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-zinc-800">
+      <button onclick="adminLogout()" class="flex items-center gap-3 px-3 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">logout</span> Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- 📊 RIGHT CONTENT AREA (BRANCH INVENTORY) -->
+  <!-- ========================================== -->
+  <main class="flex-1 lg:ml-72 flex flex-col min-h-screen h-screen overflow-y-auto w-full">
+    
+    <!-- Top Header -->
+    <header class="bg-white px-4 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 text-zinc-600 hover:text-primary rounded-lg hover:bg-zinc-100 transition">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h2 class="text-lg lg:text-xl font-extrabold text-zinc-800">Branch & Warehouse</h2>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button class="p-2 bg-zinc-50 border border-zinc-200 rounded-full text-zinc-600 hover:text-primary transition relative shadow-sm">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-zinc-200">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-9 h-9 rounded-full object-cover border border-zinc-200 shadow-sm">
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="p-4 lg:p-8 space-y-6 pb-24">
+      
+      <!-- Branch Stats Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <p class="text-[10px] lg:text-xs font-bold text-zinc-500 uppercase tracking-wider">Total Branches</p>
+            <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">storefront</span>
+            </div>
+          </div>
+          <h3 class="text-xl lg:text-2xl font-black text-zinc-900">3</h3>
+          <p class="text-[9px] lg:text-[10px] font-bold text-blue-600 mt-2">Active Locations</p>
+        </div>
+
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <p class="text-[10px] lg:text-xs font-bold text-zinc-500 uppercase tracking-wider">Total Stock</p>
+            <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">inventory_2</span>
+            </div>
+          </div>
+          <h3 class="text-xl lg:text-2xl font-black text-zinc-900">4,250</h3>
+          <p class="text-[9px] lg:text-[10px] font-bold text-zinc-500 mt-2">Units across all branches</p>
+        </div>
+        
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <p class="text-[10px] lg:text-xs font-bold text-zinc-500 uppercase tracking-wider">In Transit</p>
+            <div class="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">local_shipping</span>
+            </div>
+          </div>
+          <h3 class="text-xl lg:text-2xl font-black text-zinc-900">120</h3>
+          <p class="text-[9px] lg:text-[10px] font-bold text-amber-600 mt-2">Units moving between stores</p>
+        </div>
+
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-col lg:flex-row gap-4 justify-between items-center bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+        <div class="w-full lg:w-96 flex items-center border border-zinc-200 rounded-xl px-3 bg-zinc-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+          <span class="material-symbols-outlined text-zinc-400 text-[18px]">search</span>
+          <input type="text" placeholder="Search branch or location..." class="w-full p-2.5 text-xs font-bold text-zinc-800 bg-transparent focus:outline-none ml-2">
+        </div>
+
+        <div class="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
+          <button class="px-4 py-2.5 bg-zinc-100 text-zinc-700 hover:bg-zinc-200 text-xs font-bold rounded-lg whitespace-nowrap transition flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px]">sync_alt</span> Transfer Stock
+          </button>
+          <button class="px-4 py-2.5 bg-primary text-white text-xs font-extrabold rounded-lg whitespace-nowrap shadow-md shadow-primary/20 hover:bg-[#920056] transition flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px]">add</span> Add New Branch
+          </button>
+        </div>
+      </div>
+
+      <!-- Branches Table -->
+      <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[900px]">
+            <thead>
+              <tr class="bg-zinc-50/80 text-[10px] font-extrabold text-zinc-500 uppercase tracking-wider border-b border-zinc-200">
+                <th class="p-4 whitespace-nowrap">Branch Name & ID</th>
+                <th class="p-4 whitespace-nowrap">Location details</th>
+                <th class="p-4 whitespace-nowrap">Manager Info</th>
+                <th class="p-4 whitespace-nowrap">Available Stock</th>
+                <th class="p-4 whitespace-nowrap">Status</th>
+                <th class="p-4 whitespace-nowrap text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="text-xs font-medium text-zinc-700 divide-y divide-zinc-100">
+              
+              <!-- Main Warehouse -->
+              <tr class="hover:bg-zinc-50 transition-colors">
+                <td class="p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center">
+                      <span class="material-symbols-outlined">warehouse</span>
+                    </div>
+                    <div>
+                      <p class="font-extrabold text-zinc-900 text-sm">Main Warehouse</p>
+                      <p class="text-[10px] text-zinc-500 font-bold mt-0.5">ID: BR-001 (HQ)</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Kolkata, West Bengal</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">Pin - 700001</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Avijit Chakraborty</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 9876543210</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-extrabold text-zinc-900">3,200 Units</p>
+                  <div class="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
+                    <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 85%"></div>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">Active</span>
+                </td>
+                <td class="p-4 text-right">
+                  <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="View Inventory">
+                    <span class="material-symbols-outlined text-[18px]">inventory</span>
+                  </button>
+                  <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="Edit Branch">
+                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Retail Outlet 1 -->
+              <tr class="hover:bg-zinc-50 transition-colors">
+                <td class="p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                      <span class="material-symbols-outlined">store</span>
+                    </div>
+                    <div>
+                      <p class="font-extrabold text-zinc-900 text-sm">Barasat Outlet</p>
+                      <p class="text-[10px] text-zinc-500 font-bold mt-0.5">ID: BR-002</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Barasat, North 24 Pgs</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">Pin - 700124</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Sumit Chakraborty</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 8765432109</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-extrabold text-zinc-900">850 Units</p>
+                  <div class="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
+                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 45%"></div>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">Active</span>
+                </td>
+                <td class="p-4 text-right">
+                  <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="View Inventory">
+                    <span class="material-symbols-outlined text-[18px]">inventory</span>
+                  </button>
+                  <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="Edit Branch">
+                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Retail Outlet 2 (Low Stock) -->
+              <tr class="hover:bg-zinc-50 transition-colors">
+                <td class="p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                      <span class="material-symbols-outlined">store</span>
+                    </div>
+                    <div>
+                      <p class="font-extrabold text-zinc-900 text-sm">Siliguri Store</p>
+                      <p class="text-[10px] text-zinc-500 font-bold mt-0.5">ID: BR-003</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Siliguri, Darjeeling</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">Pin - 734001</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Rahul Das</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 9988776655</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-extrabold text-zinc-900">200 Units <span class="text-rose-500 text-[10px] ml-1">(Low)</span></p>
+                  <div class="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
+                    <div class="bg-rose-500 h-1.5 rounded-full" style="width: 15%"></div>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">Restock Needed</span>
+                </td>
+                <td class="p-4 text-right">
+                  <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="View Inventory">
+                    <span class="material-symbols-outlined text-[18px]">inventory</span>
+                  </button>
+                  <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="Edit Branch">
+                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- CORE JAVASCRIPT LOGIC -->
+  <!-- ========================================== -->
+  <script>
+    // Security Check
+    window.addEventListener('DOMContentLoaded', () => {
+      const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
+      if (isLoggedIn !== "true") { window.location.href = "index.html"; }
+    });
+
+    // Mobile Sidebar Toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Logout Functionality
+    function adminLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("isAdminLoggedIn");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -3,272 +3,215 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Orders Management | Moni Dresses Admin</title>
-  
-  <!-- Tailwind CSS & Google Fonts -->
+  <title>Admin Dashboard — MONI DRESSES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 
-  <!-- Tailwind Configuration -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: { primary: "#b3006a", surface: "#f8fafc", panel: "#0f172a" },
+          colors: { primary: "#b3006a", surface: "#fbf9f8" },
           fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] }
         }
       }
     }
   </script>
 </head>
-<body class="bg-surface text-zinc-900 font-sans min-h-screen flex overflow-hidden">
+<body class="bg-surface text-zinc-900 font-sans min-h-screen pb-12">
 
-  <!-- ========================================== -->
-  <!-- MOBILE SIDEBAR OVERLAY -->
-  <!-- ========================================== -->
-  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-panel/60 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+  <!-- HEADER -->
+  <header class="bg-white border-b border-zinc-200 px-6 py-4 flex justify-between items-center sticky top-0 z-30 shadow-sm">
+    <h1 class="text-base font-extrabold text-primary uppercase tracking-wider">Moni Dresses — Admin Dashboard</h1>
+    <button onclick="fetchOrders()" class="flex items-center gap-1.5 px-3 py-2 bg-primary/10 text-primary font-bold text-xs rounded-xl hover:bg-primary/20 transition-all">
+      <span class="material-symbols-outlined text-sm">refresh</span> Refresh Orders
+    </button>
+  </header>
 
-  <!-- ========================================== -->
-  <!-- 🗂️ LEFT SIDEBAR (NAVIGATION MENU) -->
-  <!-- ========================================== -->
-  <aside id="sidebar" class="w-72 bg-panel text-white min-h-screen fixed left-0 top-0 h-full flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto">
-    
-    <div class="p-5 flex items-center justify-between border-b border-zinc-800 sticky top-0 bg-panel z-10">
-      <h1 class="text-lg font-extrabold text-white tracking-wider flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary text-2xl">storefront</span> MONI DRESSES
-      </h1>
-      <button onclick="toggleSidebar()" class="lg:hidden text-zinc-400 hover:text-white transition-colors">
-        <span class="material-symbols-outlined">close</span>
-      </button>
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+    <div class="flex justify-between items-center">
+      <h2 class="text-sm font-bold text-zinc-500 uppercase tracking-wider">Live Customer Orders</h2>
+      <span id="order-count" class="text-xs bg-zinc-200 text-zinc-700 font-extrabold px-2.5 py-1 rounded-full">0 Orders</span>
     </div>
 
-    <nav class="flex-1 p-4 space-y-1">
-      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-3">Main Menu</p>
-      
-      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
-      </a>
-      
-      <!-- Active Menu Item (Orders) -->
-      <a href="orders.html" class="flex items-center gap-3 px-3 py-3 bg-primary text-white rounded-xl font-bold text-xs transition shadow-lg shadow-primary/20">
-        <span class="material-symbols-outlined text-[18px]">shopping_bag</span> Orders & Tracking
-      </a>
-      
-      <a href="products.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">inventory_2</span> Product Management
-      </a>
-
-      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">B2B & Branches</p>
-      <a href="b2b.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">domain</span> B2B Portal & Orders
-      </a>
-      <a href="branches.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">store</span> Branch Inventory
-      </a>
-
-      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Marketing & Users</p>
-      <a href="customers.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">group</span> Customer Details
-      </a>
-      <a href="sms.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">sms</span> Bulk SMS Send
-      </a>
-
-      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Settings & Design</p>
-      <a href="theme.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">palette</span> Website Design (UI)
-      </a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">settings</span> Setup (Payment, Shiprocket)
-      </a>
-    </nav>
-
-    <div class="p-4 border-t border-zinc-800">
-      <button onclick="adminLogout()" class="flex items-center gap-3 px-3 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold text-xs transition">
-        <span class="material-symbols-outlined text-[18px]">logout</span> Log Out
-      </button>
-    </div>
-  </aside>
-
-  <!-- ========================================== -->
-  <!-- 📊 RIGHT CONTENT AREA (ORDERS PAGE) -->
-  <!-- ========================================== -->
-  <main class="flex-1 lg:ml-72 flex flex-col min-h-screen h-screen overflow-y-auto w-full">
-    
-    <!-- Top Header Navigation -->
-    <header class="bg-white px-4 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-      <div class="flex items-center gap-4">
-        <button onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 text-zinc-600 hover:text-primary rounded-lg hover:bg-zinc-100 transition">
-          <span class="material-symbols-outlined">menu</span>
-        </button>
-        <h2 class="text-lg lg:text-xl font-extrabold text-zinc-800">Orders Management</h2>
-      </div>
-      
-      <div class="flex items-center gap-4">
-        <button class="p-2 bg-zinc-50 border border-zinc-200 rounded-full text-zinc-600 hover:text-primary transition relative shadow-sm">
-          <span class="material-symbols-outlined text-[20px]">notifications</span>
-        </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-zinc-200">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-9 h-9 rounded-full object-cover border border-zinc-200 shadow-sm">
-        </div>
-      </div>
-    </header>
-
-    <!-- Page Content -->
-    <div class="p-4 lg:p-8 space-y-6 pb-24">
-      
-      <!-- Filters and Search Bar -->
-      <div class="flex flex-col lg:flex-row gap-4 justify-between items-center bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
-        
-        <!-- Search -->
-        <div class="w-full lg:w-96 flex items-center border border-zinc-200 rounded-xl px-3 bg-zinc-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
-          <span class="material-symbols-outlined text-zinc-400 text-[18px]">search</span>
-          <input type="text" placeholder="Search by Order ID, Name, Phone..." class="w-full p-2.5 text-xs font-bold text-zinc-800 bg-transparent focus:outline-none ml-2">
-        </div>
-
-        <!-- Filters -->
-        <div class="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
-          <button class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg whitespace-nowrap shadow-sm">All Orders</button>
-          <button class="px-4 py-2 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 text-xs font-bold rounded-lg whitespace-nowrap transition">New / Processing</button>
-          <button class="px-4 py-2 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 text-xs font-bold rounded-lg whitespace-nowrap transition">Shipped</button>
-          <button class="px-4 py-2 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 text-xs font-bold rounded-lg whitespace-nowrap transition">Delivered</button>
-        </div>
-      </div>
-
-      <!-- Orders Table -->
-      <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse min-w-[900px]">
-            <thead>
-              <tr class="bg-zinc-50/80 text-[10px] font-extrabold text-zinc-500 uppercase tracking-wider border-b border-zinc-200">
-                <th class="p-4 whitespace-nowrap">Order ID & Date</th>
-                <th class="p-4 whitespace-nowrap">Customer Info</th>
-                <th class="p-4 whitespace-nowrap">Items (Qty)</th>
-                <th class="p-4 whitespace-nowrap">Total Bill</th>
-                <th class="p-4 whitespace-nowrap">Payment</th>
-                <th class="p-4 whitespace-nowrap">Update Status</th>
-                <th class="p-4 whitespace-nowrap text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody class="text-xs font-medium text-zinc-700 divide-y divide-zinc-100">
-              
-              <!-- Order Row 1 -->
-              <tr class="hover:bg-zinc-50 transition-colors">
-                <td class="p-4">
-                  <p class="font-extrabold text-primary text-sm">#MD-8921</p>
-                  <p class="text-[10px] text-zinc-400 font-bold mt-0.5">24 Oct, 2026 • 10:30 AM</p>
-                </td>
-                <td class="p-4">
-                  <p class="font-bold text-zinc-900">Avijit Chakraborty</p>
-                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 9876543210</p>
-                  <p class="text-[10px] text-zinc-400 truncate w-32" title="Kolkata, West Bengal - 700001">Kolkata, WB...</p>
-                </td>
-                <td class="p-4">
-                  <p class="font-bold text-zinc-800">Red Cotton Blouse (M)</p>
-                  <p class="text-[10px] text-zinc-500 font-bold mt-0.5">Qty: 2</p>
-                </td>
-                <td class="p-4">
-                  <p class="font-extrabold text-zinc-900">₹850</p>
-                  <p class="text-[10px] text-emerald-600 font-bold mt-0.5">Free Shipping</p>
-                </td>
-                <td class="p-4">
-                  <span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">Prepaid (UPI)</span>
-                </td>
-                <td class="p-4">
-                  <select class="w-full p-2 border border-zinc-300 rounded-lg text-[10px] font-bold text-zinc-700 focus:outline-primary bg-white cursor-pointer">
-                    <option value="processing" selected>Processing</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td class="p-4 text-right">
-                  <button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition" title="View Full Details">
-                    <span class="material-symbols-outlined text-[20px]">visibility</span>
-                  </button>
-                </td>
-              </tr>
-
-              <!-- Order Row 2 -->
-              <tr class="hover:bg-zinc-50 transition-colors">
-                <td class="p-4">
-                  <p class="font-extrabold text-primary text-sm">#MD-8920</p>
-                  <p class="text-[10px] text-zinc-400 font-bold mt-0.5">23 Oct, 2026 • 04:15 PM</p>
-                </td>
-                <td class="p-4">
-                  <p class="font-bold text-zinc-900">Sumit Chakraborty</p>
-                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 8765432109</p>
-                  <p class="text-[10px] text-zinc-400 truncate w-32" title="Barasat, North 24 Pgs - 700124">Barasat, North 24...</p>
-                </td>
-                <td class="p-4">
-                  <p class="font-bold text-zinc-800">Black Silk Crop (L)</p>
-                  <p class="text-[10px] text-zinc-500 font-bold mt-0.5">Qty: 1</p>
-                </td>
-                <td class="p-4">
-                  <p class="font-extrabold text-zinc-900">₹1,260</p>
-                  <p class="text-[10px] text-zinc-500 font-bold mt-0.5">+₹60 COD Fee</p>
-                </td>
-                <td class="p-4">
-                  <span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">COD (Cash)</span>
-                </td>
-                <td class="p-4">
-                  <select class="w-full p-2 border border-zinc-300 rounded-lg text-[10px] font-bold text-zinc-700 focus:outline-primary bg-white cursor-pointer">
-                    <option value="processing">Processing</option>
-                    <option value="shipped" selected>Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td class="p-4 text-right">
-                  <button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition" title="View Full Details">
-                    <span class="material-symbols-outlined text-[20px]">visibility</span>
-                  </button>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-        
-        <!-- Pagination Placeholder -->
-        <div class="p-4 border-t border-zinc-100 flex items-center justify-between text-xs font-bold text-zinc-500 bg-zinc-50/50">
-          <p>Showing 1 to 2 of 45 Orders</p>
-          <div class="flex items-center gap-2">
-            <button class="p-1.5 rounded bg-white border border-zinc-200 hover:border-primary hover:text-primary transition"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
-            <button class="p-1.5 rounded bg-white border border-zinc-200 hover:border-primary hover:text-primary transition"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
-          </div>
-        </div>
-      </div>
-
+    <!-- ORDERS LIST CONTAINER -->
+    <div id="orders-container" class="space-y-4">
+      <p class="text-center text-zinc-400 text-xs py-10">Loading orders from Firebase...</p>
     </div>
   </main>
 
-  <!-- ========================================== -->
-  <!-- CORE JAVASCRIPT LOGIC -->
-  <!-- ========================================== -->
-  <script>
-    // Security Check
-    window.addEventListener('DOMContentLoaded', () => {
-      const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
-      if (isLoggedIn !== "true") { window.location.href = "index.html"; }
-    });
+  <!-- ADMIN OTP VERIFICATION MODAL -->
+  <div id="admin-otp-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl space-y-4 text-center">
+      <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto">
+        <span class="material-symbols-outlined text-2xl">lock_person</span>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-zinc-800">Customer OTP Verification Required</h3>
+        <p class="text-xs text-zinc-500 mt-1">To modify or cancel this order, enter the OTP sent to customer phone: <span id="target-phone-display" class="font-bold text-zinc-800"></span></p>
+      </div>
+      <input type="text" id="admin-otp-input" maxlength="4" placeholder="Enter 4-digit OTP" class="w-full text-center tracking-[0.8em] text-lg font-bold p-3 border border-zinc-300 rounded-xl focus:outline-primary bg-zinc-50">
+      <button onclick="verifyAndExecuteAdminAction()" class="w-full py-3 bg-primary text-white font-bold text-xs rounded-xl shadow-md active:scale-95 transition-all uppercase">Verify & Update Order</button>
+      <button onclick="closeModal()" class="text-xs font-bold text-zinc-400 hover:text-zinc-600 block mx-auto">Cancel</button>
+    </div>
+  </div>
 
-    // Mobile Sidebar Toggle
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-      sidebar.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
-    }
+  <!-- FIREBASE & ADMIN SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-    // Logout Functionality
-    function adminLogout() {
-      if (confirm("Are you sure you want to log out?")) {
-        localStorage.removeItem("isAdminLoggedIn");
-        window.location.href = "index.html";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZdG23Io-oMElZ5XVmhVLd87-sq136dhY",
+      authDomain: "moni-dresses-db.firebaseapp.com",
+      projectId: "moni-dresses-db",
+      storageBucket: "moni-dresses-db.firebasestorage.app",
+      messagingSenderId: "24076547918",
+      appId: "1:24076547918:web:6cae50157f9c6749ff501f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentSelectedDocId = null;
+    let targetNewStatus = null;
+    let generatedCustomerOTP = "1234"; // Testing OTP (Can be integrated with SMS Gateway later)
+    let targetCustomerPhone = "";
+
+    window.fetchOrders = async function() {
+      const container = document.getElementById('orders-container');
+      container.innerHTML = `<p class="text-center text-zinc-400 text-xs py-10">Fetching latest orders...</p>`;
+
+      try {
+        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        container.innerHTML = "";
+        document.getElementById('order-count').innerText = `${querySnapshot.size} Orders`;
+
+        if (querySnapshot.empty) {
+          container.innerHTML = `<p class="text-center text-zinc-400 text-xs py-10">No orders found in database.</p>`;
+          return;
+        }
+
+        querySnapshot.forEach((documentSnap) => {
+          const data = documentSnap.data();
+          const docId = documentSnap.id;
+
+          // Format Date and Time properly
+          let formattedDate = "N/A";
+          if (data.createdAt && data.createdAt.toDate) {
+            formattedDate = data.createdAt.toDate().toLocaleString('en-IN', {
+              day: '2-digit', month: 'short', year: 'numeric', 
+              hour: '2-digit', minute: '2-digit', hour12: true
+            });
+          }
+
+          // Build items list HTML
+          let itemsHtml = "";
+          if (data.items && Array.isArray(data.items)) {
+            data.items.forEach(item => {
+              itemsHtml += `<div class="flex justify-between text-xs text-zinc-600 py-0.5">
+                <span>${item.name || 'Product'} (Qty: ${item.qty || 1})</span>
+                <span class="font-bold">₹${item.price * (item.qty || 1)}</span>
+              </div>`;
+            });
+          }
+
+          // Status Badge Color
+          let statusColor = "bg-amber-100 text-amber-700";
+          if (data.status === "Cancelled") statusColor = "bg-rose-100 text-rose-700";
+          if (data.status === "Shipped" || data.status === "Completed") statusColor = "bg-emerald-100 text-emerald-700";
+
+          const card = document.createElement('div');
+          card.className = "bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-4";
+          card.innerHTML = `
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-zinc-100 pb-3 gap-2">
+              <div>
+                <span class="text-xs font-black text-primary">${data.orderId || 'MD-ORDER'}</span>
+                <p class="text-[11px] text-zinc-400 font-semibold mt-0.5">Ordered on: ${formattedDate}</p>
+              </div>
+              <span class="text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider ${statusColor}">${data.status || 'Pending'}</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div class="space-y-1 bg-zinc-50 p-3 rounded-xl">
+                <p class="font-bold text-zinc-800">Customer: ${data.customer?.name || 'N/A'}</p>
+                <p class="text-zinc-600 font-medium">Phone: +91 ${data.customer?.phone || 'N/A'}</p>
+                <p class="text-zinc-500 leading-relaxed">Address: ${data.customer?.address || ''}, ${data.customer?.city || ''} - ${data.customer?.pinCode || ''}</p>
+              </div>
+
+              <div class="space-y-1.5 bg-zinc-50 p-3 rounded-xl">
+                <p class="font-bold text-zinc-700 mb-1">Purchased Items:</p>
+                ${itemsHtml}
+                <div class="border-t border-zinc-200 pt-2 flex justify-between font-black text-zinc-900 text-xs">
+                  <span>Total Amount (${data.financials?.paymentMethod?.toUpperCase() || 'COD'})</span>
+                  <span class="text-primary">₹${data.financials?.totalAmount || 0}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-zinc-100">
+              <button onclick="requestOTPAction('${docId}', '${data.customer?.phone}', 'Processing')" class="px-3 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-[11px] rounded-lg transition-all">Mark Processing</button>
+              <button onclick="requestOTPAction('${docId}', '${data.customer?.phone}', 'Shipped')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[11px] rounded-lg transition-all">Mark Shipped</button>
+              <button onclick="requestOTPAction('${docId}', '${data.customer?.phone}', 'Cancelled')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[11px] rounded-lg transition-all ml-auto">Cancel Order</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error("Error loading orders: ", error);
+        container.innerHTML = `<p class="text-center text-rose-500 text-xs py-10">Failed to load orders: ${error.message}</p>`;
       }
+    };
+
+    // Trigger OTP modal before changing order status
+    window.requestOTPAction = function(docId, phone, newStatus) {
+      currentSelectedDocId = docId;
+      targetNewStatus = newStatus;
+      targetCustomerPhone = phone;
+      
+      document.getElementById('target-phone-display').innerText = "+91 " + phone;
+      document.getElementById('admin-otp-input').value = "";
+      document.getElementById('admin-otp-modal').classList.remove('hidden');
+
+      // For testing, default OTP is set to 1234. In production, trigger SMS API here.
+      alert(`OTP sent to customer (+91 ${phone}). For testing, use OTP: 1234`);
+    };
+
+    // Verify OTP and update Firestore database
+    window.verifyAndExecuteAdminAction = async function() {
+      const enteredOtp = document.getElementById('admin-otp-input').value.trim();
+
+      if (enteredOtp === generatedCustomerOTP) {
+        try {
+          const docRef = doc(db, "orders", currentSelectedDocId);
+          await updateDoc(docRef, {
+            status: targetNewStatus
+          });
+
+          alert(`Order successfully updated to '${targetNewStatus}'!`);
+          closeModal();
+          fetchOrders(); // Refresh list
+        } catch (err) {
+          alert("Database update failed: " + err.message);
+        }
+      } else {
+        alert("Incorrect OTP! Action restricted.");
+      }
+    };
+
+    window.closeModal = function() {
+      document.getElementById('admin-otp-modal').classList.add('hidden');
     }
+
+    // Auto-fetch orders on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchOrders();
+    });
   </script>
 </body>
 </html>

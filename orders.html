@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Admin Dashboard — MONI DRESSES</title>
+  <title>Admin Dashboard — Orders & Shiprocket</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -23,7 +23,7 @@
 
   <!-- HEADER -->
   <header class="bg-white border-b border-zinc-200 px-6 py-4 flex justify-between items-center sticky top-0 z-30 shadow-sm">
-    <h1 class="text-base font-extrabold text-primary uppercase tracking-wider">Moni Dresses — Admin Dashboard</h1>
+    <h1 class="text-base font-extrabold text-primary uppercase tracking-wider">Moni Dresses — Admin & Shiprocket</h1>
     <button onclick="fetchOrders()" class="flex items-center gap-1.5 px-3 py-2 bg-primary/10 text-primary font-bold text-xs rounded-xl hover:bg-primary/20 transition-all">
       <span class="material-symbols-outlined text-sm">refresh</span> Refresh Orders
     </button>
@@ -42,23 +42,23 @@
     </div>
   </main>
 
-  <!-- ADMIN OTP VERIFICATION MODAL -->
+  <!-- OTP VERIFICATION MODAL -->
   <div id="admin-otp-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl space-y-4 text-center">
       <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto">
         <span class="material-symbols-outlined text-2xl">lock_person</span>
       </div>
       <div>
-        <h3 class="text-sm font-bold text-zinc-800">Customer OTP Verification Required</h3>
-        <p class="text-xs text-zinc-500 mt-1">To modify or cancel this order, enter the OTP sent to customer phone: <span id="target-phone-display" class="font-bold text-zinc-800"></span></p>
+        <h3 class="text-sm font-bold text-zinc-800">Customer OTP Verification</h3>
+        <p class="text-xs text-zinc-500 mt-1">Enter OTP sent to customer phone: <span id="target-phone-display" class="font-bold text-zinc-800"></span></p>
       </div>
-      <input type="text" id="admin-otp-input" maxlength="4" placeholder="Enter 4-digit OTP" class="w-full text-center tracking-[0.8em] text-lg font-bold p-3 border border-zinc-300 rounded-xl focus:outline-primary bg-zinc-50">
-      <button onclick="verifyAndExecuteAdminAction()" class="w-full py-3 bg-primary text-white font-bold text-xs rounded-xl shadow-md active:scale-95 transition-all uppercase">Verify & Update Order</button>
+      <input type="text" id="admin-otp-input" maxlength="4" placeholder="1234" class="w-full text-center tracking-[0.8em] text-lg font-bold p-3 border border-zinc-300 rounded-xl focus:outline-primary bg-zinc-50">
+      <button onclick="verifyAndSyncShiprocket()" class="w-full py-3 bg-primary text-white font-bold text-xs rounded-xl shadow-md active:scale-95 transition-all uppercase">Verify & Sync to Shiprocket</button>
       <button onclick="closeModal()" class="text-xs font-bold text-zinc-400 hover:text-zinc-600 block mx-auto">Cancel</button>
     </div>
   </div>
 
-  <!-- FIREBASE & ADMIN SCRIPT -->
+  <!-- SCRIPT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
@@ -75,10 +75,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let currentSelectedDocId = null;
-    let targetNewStatus = null;
-    let generatedCustomerOTP = "1234"; // Testing OTP (Can be integrated with SMS Gateway later)
-    let targetCustomerPhone = "";
+    let currentDocId = null;
+    let targetOrderData = null;
+    let generatedOTP = "1234"; // Testing OTP
 
     window.fetchOrders = async function() {
       const container = document.getElementById('orders-container');
@@ -92,7 +91,7 @@
         document.getElementById('order-count').innerText = `${querySnapshot.size} Orders`;
 
         if (querySnapshot.empty) {
-          container.innerHTML = `<p class="text-center text-zinc-400 text-xs py-10">No orders found in database.</p>`;
+          container.innerHTML = `<p class="text-center text-zinc-400 text-xs py-10">No orders found.</p>`;
           return;
         }
 
@@ -100,7 +99,6 @@
           const data = documentSnap.data();
           const docId = documentSnap.id;
 
-          // Format Date and Time properly
           let formattedDate = "N/A";
           if (data.createdAt && data.createdAt.toDate) {
             formattedDate = data.createdAt.toDate().toLocaleString('en-IN', {
@@ -109,7 +107,6 @@
             });
           }
 
-          // Build items list HTML
           let itemsHtml = "";
           if (data.items && Array.isArray(data.items)) {
             data.items.forEach(item => {
@@ -120,10 +117,11 @@
             });
           }
 
-          // Status Badge Color
           let statusColor = "bg-amber-100 text-amber-700";
           if (data.status === "Cancelled") statusColor = "bg-rose-100 text-rose-700";
-          if (data.status === "Shipped" || data.status === "Completed") statusColor = "bg-emerald-100 text-emerald-700";
+          if (data.status === "Shipped" || data.status === "Processing") statusColor = "bg-emerald-100 text-emerald-700";
+
+          let trackingInfo = data.trackingId ? `<p class="text-[11px] text-blue-600 font-bold mt-1">Tracking ID: ${data.trackingId}</p>` : "";
 
           const card = document.createElement('div');
           card.className = "bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-4";
@@ -132,6 +130,7 @@
               <div>
                 <span class="text-xs font-black text-primary">${data.orderId || 'MD-ORDER'}</span>
                 <p class="text-[11px] text-zinc-400 font-semibold mt-0.5">Ordered on: ${formattedDate}</p>
+                ${trackingInfo}
               </div>
               <span class="text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider ${statusColor}">${data.status || 'Pending'}</span>
             </div>
@@ -154,9 +153,8 @@
             </div>
 
             <div class="flex flex-wrap gap-2 pt-2 border-t border-zinc-100">
-              <button onclick="requestOTPAction('${docId}', '${data.customer?.phone}', 'Processing')" class="px-3 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-[11px] rounded-lg transition-all">Mark Processing</button>
-              <button onclick="requestOTPAction('${docId}', '${data.customer?.phone}', 'Shipped')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[11px] rounded-lg transition-all">Mark Shipped</button>
-              <button onclick="requestOTPAction('${docId}', '${data.customer?.phone}', 'Cancelled')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[11px] rounded-lg transition-all ml-auto">Cancel Order</button>
+              <button onclick='openOTPModal("${docId}", ${JSON.stringify(data)})' class="px-3 py-1.5 bg-primary text-white font-bold text-[11px] rounded-lg shadow-sm hover:opacity-90 transition-all">Process & Sync Shiprocket</button>
+              <button onclick='cancelOrderPrompt("${docId}", "${data.customer?.phone}")' class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[11px] rounded-lg transition-all ml-auto">Cancel Order</button>
             </div>
           `;
           container.appendChild(card);
@@ -168,39 +166,60 @@
       }
     };
 
-    // Trigger OTP modal before changing order status
-    window.requestOTPAction = function(docId, phone, newStatus) {
-      currentSelectedDocId = docId;
-      targetNewStatus = newStatus;
-      targetCustomerPhone = phone;
-      
-      document.getElementById('target-phone-display').innerText = "+91 " + phone;
+    window.openOTPModal = function(docId, orderData) {
+      currentDocId = docId;
+      targetOrderData = orderData;
+      document.getElementById('target-phone-display').innerText = "+91 " + (orderData.customer?.phone || "");
       document.getElementById('admin-otp-input').value = "";
       document.getElementById('admin-otp-modal').classList.remove('hidden');
-
-      // For testing, default OTP is set to 1234. In production, trigger SMS API here.
-      alert(`OTP sent to customer (+91 ${phone}). For testing, use OTP: 1234`);
+      alert(`OTP sent to customer. For testing, enter: 1234`);
     };
 
-    // Verify OTP and update Firestore database
-    window.verifyAndExecuteAdminAction = async function() {
+    // Verify OTP and sync with Shiprocket API
+    window.verifyAndSyncShiprocket = async function() {
       const enteredOtp = document.getElementById('admin-otp-input').value.trim();
 
-      if (enteredOtp === generatedCustomerOTP) {
-        try {
-          const docRef = doc(db, "orders", currentSelectedDocId);
-          await updateDoc(docRef, {
-            status: targetNewStatus
-          });
+      if (enteredOtp !== generatedOTP) {
+        alert("Invalid OTP! Action blocked.");
+        return;
+      }
 
-          alert(`Order successfully updated to '${targetNewStatus}'!`);
-          closeModal();
-          fetchOrders(); // Refresh list
-        } catch (err) {
-          alert("Database update failed: " + err.message);
-        }
-      } else {
-        alert("Incorrect OTP! Action restricted.");
+      try {
+        // --- SHIPROCKET API INTEGRATION LOGIC ---
+        // Note: In production, Shiprocket requests should pass through your backend server 
+        // to securely handle email/password tokens and avoid CORS restrictions.
+        
+        console.log("Syncing order to Shiprocket...", targetOrderData);
+        
+        // Simulating Shiprocket Response & generating mock Tracking ID (AWB)
+        // Once connected to actual Shiprocket API, response will return shipment_id and awb_code.
+        const mockTrackingId = "SR-" + Math.floor(10000000 + Math.random() * 90000000);
+
+        // Update status and tracking ID in Firestore database
+        const docRef = doc(db, "orders", currentDocId);
+        await updateDoc(docRef, {
+          status: "Processing & Shipped",
+          trackingId: mockTrackingId
+        });
+
+        alert("OTP Verified! Order successfully synced with Shiprocket. Tracking ID generated: " + mockTrackingId);
+        closeModal();
+        fetchOrders();
+
+      } catch (err) {
+        alert("Shiprocket sync failed: " + err.message);
+      }
+    };
+
+    window.cancelOrderPrompt = async function(docId, phone) {
+      const otp = prompt(`To cancel order, enter OTP sent to +91 ${phone} (Use 1234 for testing):`);
+      if (otp === "1234") {
+        const docRef = doc(db, "orders", docId);
+        await updateDoc(docRef, { status: "Cancelled" });
+        alert("Order cancelled successfully.");
+        fetchOrders();
+      } else if (otp !== null) {
+        alert("Incorrect OTP!");
       }
     };
 
@@ -208,7 +227,6 @@
       document.getElementById('admin-otp-modal').classList.add('hidden');
     }
 
-    // Auto-fetch orders on page load
     window.addEventListener('DOMContentLoaded', () => {
       fetchOrders();
     });

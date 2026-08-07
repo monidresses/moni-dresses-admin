@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>B2B Portal | Moni Dresses Admin</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#b3006a", surface: "#f8fafc", panel: "#0f172a" },
+          fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface text-zinc-900 font-sans min-h-screen flex overflow-hidden">
+
+  <!-- ========================================== -->
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <!-- ========================================== -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-panel/60 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+
+  <!-- ========================================== -->
+  <!-- 🗂️ LEFT SIDEBAR (NAVIGATION MENU) -->
+  <!-- ========================================== -->
+  <aside id="sidebar" class="w-72 bg-panel text-white min-h-screen fixed left-0 top-0 h-full flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto">
+    
+    <div class="p-5 flex items-center justify-between border-b border-zinc-800 sticky top-0 bg-panel z-10">
+      <h1 class="text-lg font-extrabold text-white tracking-wider flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">storefront</span> MONI DRESSES
+      </h1>
+      <button onclick="toggleSidebar()" class="lg:hidden text-zinc-400 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-1">
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-3">Main Menu</p>
+      
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+      </a>
+      
+      <a href="orders.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">shopping_bag</span> Orders & Tracking
+      </a>
+      
+      <a href="products.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">inventory_2</span> Product Management
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">B2B & Branches</p>
+      
+      <!-- Active Menu Item (B2B Portal) -->
+      <a href="b2b.html" class="flex items-center gap-3 px-3 py-3 bg-primary text-white rounded-xl font-bold text-xs transition shadow-lg shadow-primary/20">
+        <span class="material-symbols-outlined text-[18px]">domain</span> B2B Portal & Orders
+      </a>
+      
+      <a href="branches.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">store</span> Branch Inventory
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Marketing & Users</p>
+      <a href="customers.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">group</span> Customer Details
+      </a>
+      <a href="sms.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">sms</span> Bulk SMS Send
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Settings & Design</p>
+      <a href="theme.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">palette</span> Website Design (UI)
+      </a>
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">settings</span> Setup (Payment, Shiprocket)
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-zinc-800">
+      <button onclick="adminLogout()" class="flex items-center gap-3 px-3 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">logout</span> Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- 📊 RIGHT CONTENT AREA (B2B PORTAL) -->
+  <!-- ========================================== -->
+  <main class="flex-1 lg:ml-72 flex flex-col min-h-screen h-screen overflow-y-auto w-full">
+    
+    <!-- Top Header -->
+    <header class="bg-white px-4 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 text-zinc-600 hover:text-primary rounded-lg hover:bg-zinc-100 transition">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h2 class="text-lg lg:text-xl font-extrabold text-zinc-800">B2B Portal Management</h2>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button class="p-2 bg-zinc-50 border border-zinc-200 rounded-full text-zinc-600 hover:text-primary transition relative shadow-sm">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-zinc-200">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-9 h-9 rounded-full object-cover border border-zinc-200 shadow-sm">
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="p-4 lg:p-8 space-y-6 pb-24">
+      
+      <!-- B2B Stats Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <p class="text-[10px] lg:text-xs font-bold text-zinc-500 uppercase tracking-wider">Wholesale Clients</p>
+            <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">domain</span>
+            </div>
+          </div>
+          <h3 class="text-xl lg:text-2xl font-black text-zinc-900">42</h3>
+          <p class="text-[9px] lg:text-[10px] font-bold text-indigo-600 mt-2">5 Pending Approvals</p>
+        </div>
+
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <p class="text-[10px] lg:text-xs font-bold text-zinc-500 uppercase tracking-wider">Total B2B Revenue</p>
+            <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">payments</span>
+            </div>
+          </div>
+          <h3 class="text-xl lg:text-2xl font-black text-zinc-900">₹4,50,000</h3>
+          <p class="text-[9px] lg:text-[10px] font-bold text-emerald-600 mt-2">This Month</p>
+        </div>
+
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-col lg:flex-row gap-4 justify-between items-center bg-white p-4 lg:p-5 rounded-2xl border border-zinc-200 shadow-sm">
+        <div class="w-full lg:w-96 flex items-center border border-zinc-200 rounded-xl px-3 bg-zinc-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+          <span class="material-symbols-outlined text-zinc-400 text-[18px]">search</span>
+          <input type="text" placeholder="Search Business Name, GST or Client..." class="w-full p-2.5 text-xs font-bold text-zinc-800 bg-transparent focus:outline-none ml-2">
+        </div>
+
+        <div class="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
+          <button class="px-4 py-2.5 bg-zinc-100 text-zinc-700 hover:bg-zinc-200 text-xs font-bold rounded-lg whitespace-nowrap transition flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px]">verified_user</span> Pending Approvals
+          </button>
+          <button class="px-4 py-2.5 bg-primary text-white text-xs font-extrabold rounded-lg whitespace-nowrap shadow-md shadow-primary/20 hover:bg-[#920056] transition flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px]">add_business</span> Add B2B Client
+          </button>
+        </div>
+      </div>
+
+      <!-- B2B Clients Table -->
+      <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[900px]">
+            <thead>
+              <tr class="bg-zinc-50/80 text-[10px] font-extrabold text-zinc-500 uppercase tracking-wider border-b border-zinc-200">
+                <th class="p-4 whitespace-nowrap">Business Details</th>
+                <th class="p-4 whitespace-nowrap">Contact Person</th>
+                <th class="p-4 whitespace-nowrap">GST Details</th>
+                <th class="p-4 whitespace-nowrap">Pricing Tier</th>
+                <th class="p-4 whitespace-nowrap">Status</th>
+                <th class="p-4 whitespace-nowrap text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="text-xs font-medium text-zinc-700 divide-y divide-zinc-100">
+              
+              <!-- Pending Client Row -->
+              <tr class="hover:bg-zinc-50 transition-colors bg-amber-50/20">
+                <td class="p-4">
+                  <p class="font-extrabold text-zinc-900 text-sm">Roy Apparels</p>
+                  <p class="text-[10px] text-zinc-500 font-bold mt-0.5">Kolkata, WB</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Suman Roy</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 9988776655</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800 uppercase tracking-wide">19ABCDE1234F1Z5</p>
+                  <p class="text-[10px] text-amber-600 font-bold mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">pending</span> Verification Pending</p>
+                </td>
+                <td class="p-4">
+                  <span class="text-[10px] font-bold text-zinc-600 bg-zinc-100 px-2 py-1 rounded border border-zinc-200">Wholesale (Bronze)</span>
+                </td>
+                <td class="p-4">
+                  <span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">Review Request</span>
+                </td>
+                <td class="p-4 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <button class="px-3 py-1.5 bg-emerald-500 text-white font-bold rounded-lg text-[10px] hover:bg-emerald-600 transition">Approve</button>
+                    <button class="p-1.5 text-zinc-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Reject Request">
+                      <span class="material-symbols-outlined text-[18px]">close</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Approved Client Row -->
+              <tr class="hover:bg-zinc-50 transition-colors">
+                <td class="p-4">
+                  <p class="font-extrabold text-zinc-900 text-sm">Fashion Hub</p>
+                  <p class="text-[10px] text-zinc-500 font-bold mt-0.5">Delhi, India</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800">Rajat Sharma</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">+91 9876512345</p>
+                </td>
+                <td class="p-4">
+                  <p class="font-bold text-zinc-800 uppercase tracking-wide">07BBBPB9000A1Z5</p>
+                  <p class="text-[10px] text-emerald-600 font-bold mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">verified</span> Verified GST</p>
+                </td>
+                <td class="p-4">
+                  <span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20">Distributor (Gold)</span>
+                </td>
+                <td class="p-4">
+                  <span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[9px] font-extrabold uppercase tracking-wider">Active</span>
+                </td>
+                <td class="p-4 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="View Orders">
+                      <span class="material-symbols-outlined text-[18px]">list_alt</span>
+                    </button>
+                    <button class="p-2 text-zinc-500 hover:text-primary hover:bg-primary/10 rounded-lg transition" title="Edit Pricing">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- CORE JAVASCRIPT LOGIC -->
+  <!-- ========================================== -->
+  <script>
+    // Security Check
+    window.addEventListener('DOMContentLoaded', () => {
+      const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
+      if (isLoggedIn !== "true") { window.location.href = "index.html"; }
+    });
+
+    // Mobile Sidebar Toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Logout Functionality
+    function adminLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("isAdminLoggedIn");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>

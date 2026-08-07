@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Theme & Design | Moni Dresses Admin</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#b3006a", surface: "#f8fafc", panel: "#0f172a" },
+          fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface text-zinc-900 font-sans min-h-screen flex overflow-hidden">
+
+  <!-- ========================================== -->
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <!-- ========================================== -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-panel/60 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+
+  <!-- ========================================== -->
+  <!-- 🗂️ LEFT SIDEBAR (NAVIGATION MENU) -->
+  <!-- ========================================== -->
+  <aside id="sidebar" class="w-72 bg-panel text-white min-h-screen fixed left-0 top-0 h-full flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto">
+    
+    <div class="p-5 flex items-center justify-between border-b border-zinc-800 sticky top-0 bg-panel z-10">
+      <h1 class="text-lg font-extrabold text-white tracking-wider flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">storefront</span> MONI DRESSES
+      </h1>
+      <button onclick="toggleSidebar()" class="lg:hidden text-zinc-400 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-1">
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-3">Main Menu</p>
+      
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+      </a>
+      <a href="orders.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">shopping_bag</span> Orders & Tracking
+      </a>
+      <a href="products.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">inventory_2</span> Product Management
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">B2B & Branches</p>
+      
+      <a href="b2b.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">domain</span> B2B Portal & Orders
+      </a>
+      <a href="branches.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">store</span> Branch Inventory
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Marketing & Users</p>
+      
+      <a href="customers.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">group</span> Customer Details
+      </a>
+      <a href="sms.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">sms</span> Bulk SMS Send
+      </a>
+
+      <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 mt-6 px-3">Settings & Design</p>
+      
+      <!-- Active Menu Item (Theme) -->
+      <a href="theme.html" class="flex items-center gap-3 px-3 py-3 bg-primary text-white rounded-xl font-bold text-xs transition shadow-lg shadow-primary/20">
+        <span class="material-symbols-outlined text-[18px]">palette</span> Website Design (UI)
+      </a>
+      
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">settings</span> Setup (Payment, Shiprocket)
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-zinc-800">
+      <button onclick="adminLogout()" class="flex items-center gap-3 px-3 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold text-xs transition">
+        <span class="material-symbols-outlined text-[18px]">logout</span> Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- 📊 RIGHT CONTENT AREA (THEME SETTINGS) -->
+  <!-- ========================================== -->
+  <main class="flex-1 lg:ml-72 flex flex-col min-h-screen h-screen overflow-y-auto w-full">
+    
+    <!-- Top Header -->
+    <header class="bg-white px-4 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 text-zinc-600 hover:text-primary rounded-lg hover:bg-zinc-100 transition">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h2 class="text-lg lg:text-xl font-extrabold text-zinc-800">Website Appearance</h2>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button class="px-4 py-2 bg-primary text-white text-xs font-extrabold rounded-lg shadow-md shadow-primary/20 hover:bg-[#920056] transition flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">save</span> Save Changes
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="p-4 lg:p-8 space-y-6 pb-24">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left Column: Branding & Colors -->
+        <div class="lg:col-span-1 space-y-6">
+          
+          <!-- Brand Logo Upload -->
+          <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm p-5">
+            <h3 class="text-sm font-extrabold text-zinc-800 border-b border-zinc-100 pb-3 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">image</span> Brand Logo
+            </h3>
+            
+            <div class="flex flex-col items-center justify-center border-2 border-dashed border-zinc-300 rounded-xl p-6 bg-zinc-50 hover:bg-zinc-100 transition cursor-pointer">
+              <span class="material-symbols-outlined text-4xl text-zinc-400 mb-2">cloud_upload</span>
+              <p class="text-xs font-bold text-zinc-600">Click to upload new logo</p>
+              <p class="text-[9px] text-zinc-400 mt-1">PNG or SVG (Max 2MB)</p>
+            </div>
+            
+            <div class="mt-4 p-3 bg-zinc-50 rounded-lg border border-zinc-100 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-zinc-400">check_circle</span>
+                <span class="text-xs font-bold text-zinc-700">moni-logo-main.png</span>
+              </div>
+              <button class="text-rose-500 hover:text-rose-700"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+            </div>
+          </div>
+
+          <!-- Color Palette Settings -->
+          <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm p-5">
+            <h3 class="text-sm font-extrabold text-zinc-800 border-b border-zinc-100 pb-3 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">palette</span> Theme Colors
+            </h3>
+            
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-bold text-zinc-800">Primary Color</p>
+                  <p class="text-[9px] text-zinc-500">Buttons, Active links</p>
+                </div>
+                <input type="color" value="#b3006a" class="w-10 h-10 rounded cursor-pointer border-0 p-0">
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-bold text-zinc-800">Background Surface</p>
+                  <p class="text-[9px] text-zinc-500">Main website background</p>
+                </div>
+                <input type="color" value="#ffffff" class="w-10 h-10 rounded cursor-pointer border-0 p-0">
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-bold text-zinc-800">Text Color</p>
+                  <p class="text-[9px] text-zinc-500">Paragraphs and headings</p>
+                </div>
+                <input type="color" value="#18181b" class="w-10 h-10 rounded cursor-pointer border-0 p-0">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Banners & Layout -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- Announcement Bar -->
+          <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm p-5">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
+              <h3 class="text-sm font-extrabold text-zinc-800 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[18px]">campaign</span> Announcement Bar
+              </h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer" checked>
+                <div class="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
+            </div>
+            
+            <div class="space-y-3">
+              <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Display Text</label>
+              <input type="text" value="🎉 Festive Sale: Flat 20% OFF on all Cotton Blouses! Use code: MONI20" class="w-full p-3 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-800 bg-zinc-50 focus:outline-primary transition-all">
+            </div>
+          </div>
+
+          <!-- Hero Banner Management -->
+          <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm p-5">
+            <h3 class="text-sm font-extrabold text-zinc-800 border-b border-zinc-100 pb-3 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">view_carousel</span> Hero Banner Slider
+            </h3>
+            
+            <!-- Banner Item 1 -->
+            <div class="p-4 border border-zinc-200 rounded-xl mb-4 flex flex-col sm:flex-row gap-4 items-center">
+              <div class="w-full sm:w-32 h-20 bg-zinc-100 rounded-lg overflow-hidden border border-zinc-200 shrink-0">
+                <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition">
+              </div>
+              <div class="flex-1 w-full space-y-2">
+                <input type="text" value="Premium Designer Blouses" placeholder="Main Heading" class="w-full p-2 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800 bg-zinc-50 focus:outline-primary">
+                <input type="text" value="https://monidresses.com/designer-collection" placeholder="Target Link (URL)" class="w-full p-2 border border-zinc-200 rounded-lg text-[10px] font-medium text-zinc-600 bg-zinc-50 focus:outline-primary">
+              </div>
+              <button class="text-rose-500 hover:bg-rose-50 p-2 rounded-lg transition"><span class="material-symbols-outlined">delete</span></button>
+            </div>
+
+            <!-- Add New Banner Button -->
+            <button class="w-full py-3 border-2 border-dashed border-zinc-300 rounded-xl text-xs font-bold text-zinc-500 hover:text-primary hover:border-primary hover:bg-primary/5 transition flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">add_photo_alternate</span> Add New Banner Image
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- CORE JAVASCRIPT LOGIC -->
+  <!-- ========================================== -->
+  <script>
+    // Security Check
+    window.addEventListener('DOMContentLoaded', () => {
+      const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
+      if (isLoggedIn !== "true") { window.location.href = "index.html"; }
+    });
+
+    // Mobile Sidebar Toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Logout Functionality
+    function adminLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("isAdminLoggedIn");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>

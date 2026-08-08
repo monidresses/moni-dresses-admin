@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Login — MONI DRESSES</title>
+  <title>Login Portal — MONI DRESSES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -24,44 +24,59 @@
     
     <!-- HEADER -->
     <div class="text-center space-y-1">
-      <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-3">
-        <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
-      </div>
-      <h1 class="text-sm font-black text-zinc-900 uppercase tracking-wider">Admin Portal Login</h1>
-      <p class="text-[11px] text-zinc-400">Enter your credentials to access control panel</p>
+      <h1 class="text-base font-black text-primary uppercase tracking-wider">MONI DRESSES</h1>
+      <p class="text-xs text-zinc-400">Select your portal to sign in</p>
     </div>
 
-    <!-- LOGIN FORM -->
-    <form id="admin-login-form" class="space-y-4">
+    <!-- ROLE SWITCHER TABS -->
+    <div class="grid grid-cols-2 gap-1 bg-zinc-100 p-1 rounded-2xl">
+      <button onclick="switchRole('client')" id="tab-client" class="py-2.5 text-xs font-extrabold rounded-xl bg-white text-primary shadow-sm transition-all">Client Login</button>
+      <button onclick="switchRole('admin')" id="tab-admin" class="py-2.5 text-xs font-extrabold rounded-xl text-zinc-500 transition-all">Admin Login</button>
+    </div>
+
+    <!-- CLIENT LOGIN FORM -->
+    <form id="client-form" class="space-y-4">
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Mobile Number / Email</label>
+        <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
+          <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">phone</span>
+          <input type="text" id="client-identifier" placeholder="Enter mobile or email" required class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
+        </div>
+      </div>
+      <button type="submit" class="w-full py-3.5 bg-primary text-white text-xs font-extrabold rounded-xl shadow-md active:scale-95 transition-all uppercase tracking-wider">
+        Continue as Client
+      </button>
+    </form>
+
+    <!-- ADMIN LOGIN FORM (Hidden by default) -->
+    <form id="admin-form" class="space-y-4 hidden">
       <div class="space-y-1">
         <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Admin Email</label>
         <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
           <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">mail</span>
-          <input type="email" id="admin-email" placeholder="admin@monidresses.com" required class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
+          <input type="email" id="admin-email" placeholder="admin@monidresses.com" class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
         </div>
       </div>
-
       <div class="space-y-1">
         <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Password</label>
         <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
           <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">lock</span>
-          <input type="password" id="admin-password" placeholder="••••••••" required class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
+          <input type="password" id="admin-password" placeholder="••••••••" class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
         </div>
       </div>
-
-      <button type="submit" id="login-btn" class="w-full py-3.5 bg-primary text-white text-xs font-extrabold rounded-xl shadow-md active:scale-95 transition-all uppercase tracking-wider">
-        Login to Dashboard
+      <button type="submit" id="admin-btn" class="w-full py-3.5 bg-primary text-white text-xs font-extrabold rounded-xl shadow-md active:scale-95 transition-all uppercase tracking-wider">
+        Login to Admin Panel
       </button>
     </form>
 
     <!-- ERROR BOX -->
     <div id="error-box" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl text-center">
-      Invalid email or password! Please try again.
+      Invalid credentials! Please try again.
     </div>
 
   </div>
 
-  <!-- FIREBASE LOGIN AUTH SCRIPT -->
+  <!-- SCRIPT LOGIC -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
@@ -78,14 +93,32 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const form = document.getElementById('admin-login-form');
-    const errorBox = document.getElementById('error-box');
+    // Tab Switcher Function
+    window.switchRole = function(role) {
+      const isClient = role === 'client';
+      document.getElementById('tab-client').className = isClient ? "py-2.5 text-xs font-extrabold rounded-xl bg-white text-primary shadow-sm transition-all" : "py-2.5 text-xs font-extrabold rounded-xl text-zinc-500 transition-all";
+      document.getElementById('tab-admin').className = !isClient ? "py-2.5 text-xs font-extrabold rounded-xl bg-white text-primary shadow-sm transition-all" : "py-2.5 text-xs font-extrabold rounded-xl text-zinc-500 transition-all";
+      
+      document.getElementById('client-form').classList.toggle('hidden', !isClient);
+      document.getElementById('admin-form').classList.toggle('hidden', isClient);
+      document.getElementById('error-box').classList.add('hidden');
+    }
 
-    form.addEventListener('submit', async (e) => {
+    // Client Login Handler
+    document.getElementById('client-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const identifier = document.getElementById('client-identifier').value;
+      localStorage.setItem('clientUser', identifier);
+      window.location.href = 'home.html'; // কাস্টমার সফলভাবে হোম পেজে যাবে
+    });
+
+    // Admin Login Handler (Firebase Auth)
+    document.getElementById('admin-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('admin-email').value;
       const password = document.getElementById('admin-password').value;
-      const btn = document.getElementById('login-btn');
+      const btn = document.getElementById('admin-btn');
+      const errorBox = document.getElementById('error-box');
 
       btn.innerText = "Authenticating...";
       errorBox.classList.add('hidden');
@@ -93,12 +126,11 @@
       try {
         await signInWithEmailAndPassword(auth, email, password);
         localStorage.setItem('isAdminLoggedIn', 'true');
-
-        window.location.href = 'dashboard.html';
+        window.location.href = 'dashboard.html'; // অ্যাডমিন সফলভাবে ড্যাশবোর্ডে যাবে
       } catch (error) {
         console.error("Login error: ", error);
         errorBox.classList.remove('hidden');
-        btn.innerText = "Login to Dashboard";
+        btn.innerText = "Login to Admin Panel";
       }
     });
   </script>

@@ -2,116 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Admin Login | Moni Dresses</title>
-  
-  <!-- Tailwind CSS & Google Fonts -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login — MONI DRESSES</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-
-  <!-- Tailwind Configuration -->
   <script>
     tailwind.config = {
-      theme: { 
-        extend: { 
-          colors: { 
-            primary: "#b3006a", 
-            panel: "#0f172a" 
-          }, 
-          fontFamily: { 
-            sans: ["Plus Jakarta Sans", "sans-serif"] 
-          } 
-        } 
+      theme: {
+        extend: {
+          colors: { primary: "#b3006a", surface: "#fbf9f8" },
+          fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] }
+        }
       }
     }
   </script>
 </head>
-<body class="bg-panel font-sans min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+<body class="bg-surface text-zinc-900 font-sans min-h-screen flex items-center justify-center p-4">
 
-  <!-- Background Decorative Elements -->
-  <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
-  <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-
-  <!-- Login Card Container -->
-  <div class="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl space-y-6 text-center relative z-10">
+  <div class="bg-white w-full max-w-[400px] p-6 rounded-3xl border border-zinc-200/80 shadow-lg space-y-6">
     
-    <!-- Header & Brand Logo -->
-    <div class="space-y-2">
-      <div class="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-primary/20">
+    <!-- HEADER -->
+    <div class="text-center space-y-2">
+      <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto">
         <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
       </div>
-      <h1 class="text-xl font-extrabold text-zinc-900 tracking-wider">MONI DRESSES</h1>
-      <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Admin Secure Login</p>
+      <h1 class="text-base font-black text-zinc-900 uppercase tracking-wider">Admin Portal</h1>
+      <p class="text-xs text-zinc-400">Sign in to manage Moni Dresses store</p>
     </div>
 
-    <!-- Admin Login Form -->
-    <form id="admin-login-form" class="space-y-4 pt-2">
-      
-      <!-- Username Input -->
-      <div class="text-left space-y-1.5">
-        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider ml-1">Admin ID</label>
-        <div class="flex items-center border border-zinc-200 rounded-xl px-3 bg-zinc-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all shadow-sm">
-          <span class="material-symbols-outlined text-zinc-400 text-[18px]">person</span>
-          <input type="text" id="admin-username" required autocomplete="username" placeholder="Enter Username" class="w-full p-3 text-xs font-bold text-zinc-800 bg-transparent focus:outline-none ml-2">
+    <!-- LOGIN FORM -->
+    <form id="admin-login-form" class="space-y-4">
+      <div class="space-y-1">
+        <label class="text-[11px] font-bold text-zinc-600 uppercase tracking-wider">Admin Email</label>
+        <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
+          <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">mail</span>
+          <input type="email" id="admin-email" placeholder="admin@monidresses.com" required class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
         </div>
       </div>
 
-      <!-- Password Input -->
-      <div class="text-left space-y-1.5">
-        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider ml-1">Password</label>
-        <div class="flex items-center border border-zinc-200 rounded-xl px-3 bg-zinc-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all shadow-sm">
-          <span class="material-symbols-outlined text-zinc-400 text-[18px]">lock</span>
-          <input type="password" id="admin-password" required autocomplete="current-password" placeholder="Enter Password" class="w-full p-3 text-xs font-bold text-zinc-800 bg-transparent focus:outline-none ml-2">
+      <div class="space-y-1">
+        <label class="text-[11px] font-bold text-zinc-600 uppercase tracking-wider">Password</label>
+        <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
+          <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">lock</span>
+          <input type="password" id="admin-password" placeholder="••••••••" required class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
         </div>
       </div>
 
-      <!-- Submit Button -->
-      <button type="submit" class="w-full py-4 bg-primary text-white font-extrabold text-xs rounded-xl shadow-lg shadow-primary/30 active:scale-95 transition-all uppercase tracking-wider mt-2 hover:bg-[#920056]">
+      <button type="submit" id="login-btn" class="w-full py-3.5 bg-primary text-white text-xs font-extrabold rounded-xl shadow-md active:scale-95 transition-all uppercase tracking-wider">
         Login to Dashboard
       </button>
     </form>
-    
-    <!-- Security Note -->
-    <p class="text-[10px] text-zinc-400 font-medium pt-2">Only authorized personnel are allowed.</p>
+
+    <!-- ERROR MESSAGE -->
+    <div id="error-box" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl text-center">
+      Invalid email or password!
+    </div>
+
   </div>
 
-  <!-- Authentication Logic -->
-  <script>
-    // 1. Check if the admin is already logged in
-    window.addEventListener('DOMContentLoaded', () => {
-      const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
-      if (isLoggedIn === "true") {
-        // Redirect to dashboard if session exists
-        window.location.href = "dashboard.html"; 
-      }
-    });
+  <!-- FIREBASE LOGIN SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-    // 2. Handle login form submission
-    document.getElementById('admin-login-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      const usernameInput = document.getElementById('admin-username').value.trim();
-      const passwordInput = document.getElementById('admin-password').value.trim();
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZdG23Io-oMElZ5XVmhVLd87-sq136dhY",
+      authDomain: "moni-dresses-db.firebaseapp.com",
+      projectId: "moni-dresses-db",
+      storageBucket: "moni-dresses-db.firebasestorage.app",
+      messagingSenderId: "24076547918",
+      appId: "1:24076547918:web:6cae50157f9c6749ff501f"
+    };
 
-      // Define admin credentials (Update these for production use)
-      const validUsername = "admin";
-      const validPassword = "moni@123";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-      // Validate credentials
-      if (usernameInput === validUsername && passwordInput === validPassword) {
+    const form = document.getElementById('admin-login-form');
+    const errorBox = document.getElementById('error-box');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value;
+      const password = document.getElementById('admin-password').value;
+      const btn = document.getElementById('login-btn');
+
+      btn.innerText = "Logging in...";
+      errorBox.classList.add('hidden');
+
+      try {
+        // Firebase Authentication Check
+        await signInWithEmailAndPassword(auth, email, password);
         
-        // Save secure session in local storage
-        localStorage.setItem("isAdminLoggedIn", "true");
+        // Save login status in localStorage
+        localStorage.setItem('isAdminLoggedIn', 'true');
         
-        // Redirect to the main dashboard panel
-        window.location.href = "dashboard.html";
-        
-      } else {
-        alert("Authentication Failed: Incorrect Username or Password!");
-        
-        // Clear the password field for retry
-        document.getElementById('admin-password').value = ""; 
+        // Redirect to dashboard page
+        window.location.href = 'dashboard.html';
+      } catch (error) {
+        console.error("Login error: ", error);
+        errorBox.classList.remove('hidden');
+        btn.innerText = "Login to Dashboard";
       }
     });
   </script>

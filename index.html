@@ -1,137 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Portal — MONI DRESSES</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Login — MONI DRESSES</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { primary: "#b3006a", surface: "#fbf9f8" },
-          fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-surface text-zinc-900 font-sans min-h-screen flex items-center justify-center p-4">
-
-  <div class="bg-white w-full max-w-[380px] p-6 rounded-3xl border border-zinc-200/80 shadow-xl space-y-6">
-    
-    <!-- HEADER -->
-    <div class="text-center space-y-1">
-      <h1 class="text-base font-black text-primary uppercase tracking-wider">MONI DRESSES</h1>
-      <p class="text-xs text-zinc-400">Select your portal to sign in</p>
-    </div>
-
-    <!-- ROLE SWITCHER TABS -->
-    <div class="grid grid-cols-2 gap-1 bg-zinc-100 p-1 rounded-2xl">
-      <button onclick="switchRole('client')" id="tab-client" class="py-2.5 text-xs font-extrabold rounded-xl bg-white text-primary shadow-sm transition-all">Client Login</button>
-      <button onclick="switchRole('admin')" id="tab-admin" class="py-2.5 text-xs font-extrabold rounded-xl text-zinc-500 transition-all">Admin Login</button>
-    </div>
-
-    <!-- CLIENT LOGIN FORM -->
-    <form id="client-form" class="space-y-4">
-      <div class="space-y-1">
-        <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Mobile Number / Email</label>
-        <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
-          <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">phone</span>
-          <input type="text" id="client-identifier" placeholder="Enter mobile or email" required class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
-        </div>
-      </div>
-      <button type="submit" class="w-full py-3.5 bg-primary text-white text-xs font-extrabold rounded-xl shadow-md active:scale-95 transition-all uppercase tracking-wider">
-        Continue as Client
-      </button>
+<body class="bg-[#fbf9f8] min-h-screen flex items-center justify-center p-4">
+  <main class="bg-white w-full max-w-sm p-7 rounded-3xl border border-zinc-200 shadow-xl space-y-6">
+    <header class="text-center"><h1 class="text-xl font-black text-[#b3006a] tracking-wider">MONI DRESSES</h1><p class="text-xs text-zinc-400 mt-1">Secure Admin Control Panel</p></header>
+    <form id="admin-form" class="space-y-4">
+      <input type="email" id="admin-email" autocomplete="username" required placeholder="Admin Email" class="w-full p-3 text-xs border border-zinc-200 rounded-xl bg-zinc-50 focus:outline-none focus:border-[#b3006a]">
+      <input type="password" id="admin-password" autocomplete="current-password" required placeholder="Password" class="w-full p-3 text-xs border border-zinc-200 rounded-xl bg-zinc-50 focus:outline-none focus:border-[#b3006a]">
+      <button id="admin-btn" class="w-full py-3.5 bg-[#b3006a] text-white text-xs font-extrabold rounded-xl">LOGIN TO ADMIN</button>
+      <p id="error-box" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl text-center"></p>
     </form>
-
-    <!-- ADMIN LOGIN FORM (Hidden by default) -->
-    <form id="admin-form" class="space-y-4 hidden">
-      <div class="space-y-1">
-        <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Admin Email</label>
-        <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
-          <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">mail</span>
-          <input type="email" id="admin-email" placeholder="admin@monidresses.com" class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
-        </div>
-      </div>
-      <div class="space-y-1">
-        <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Password</label>
-        <div class="flex items-center bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 focus-within:border-primary transition-all">
-          <span class="material-symbols-outlined text-zinc-400 text-sm mr-2">lock</span>
-          <input type="password" id="admin-password" placeholder="••••••••" class="w-full bg-transparent text-xs text-zinc-800 focus:outline-none font-medium">
-        </div>
-      </div>
-      <button type="submit" id="admin-btn" class="w-full py-3.5 bg-primary text-white text-xs font-extrabold rounded-xl shadow-md active:scale-95 transition-all uppercase tracking-wider">
-        Login to Admin Panel
-      </button>
-    </form>
-
-    <!-- ERROR BOX -->
-    <div id="error-box" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl text-center">
-      Invalid credentials! Please try again.
-    </div>
-
-  </div>
-
-  <!-- SCRIPT LOGIC -->
+  </main>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBZdG23Io-oMElZ5XVmhVLd87-sq136dhY",
-      authDomain: "moni-dresses-db.firebaseapp.com",
-      projectId: "moni-dresses-db",
-      storageBucket: "moni-dresses-db.firebasestorage.app",
-      messagingSenderId: "24076547918",
-      appId: "1:24076547918:web:6cae50157f9c6749ff501f"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Tab Switcher Function
-    window.switchRole = function(role) {
-      const isClient = role === 'client';
-      document.getElementById('tab-client').className = isClient ? "py-2.5 text-xs font-extrabold rounded-xl bg-white text-primary shadow-sm transition-all" : "py-2.5 text-xs font-extrabold rounded-xl text-zinc-500 transition-all";
-      document.getElementById('tab-admin').className = !isClient ? "py-2.5 text-xs font-extrabold rounded-xl bg-white text-primary shadow-sm transition-all" : "py-2.5 text-xs font-extrabold rounded-xl text-zinc-500 transition-all";
-      
-      document.getElementById('client-form').classList.toggle('hidden', !isClient);
-      document.getElementById('admin-form').classList.toggle('hidden', isClient);
-      document.getElementById('error-box').classList.add('hidden');
-    }
-
-    // Client Login Handler
-    document.getElementById('client-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const identifier = document.getElementById('client-identifier').value;
-      localStorage.setItem('clientUser', identifier);
-      window.location.href = 'home.html'; // কাস্টমার সফলভাবে হোম পেজে যাবে
+    import { auth, db } from './db.js';
+    import { signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js';
+    import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js';
+    const form = document.getElementById('admin-form');
+    const btn = document.getElementById('admin-btn');
+    const error = document.getElementById('error-box');
+    const showError = message => { error.textContent = message; error.classList.remove('hidden'); btn.disabled = false; btn.textContent = 'LOGIN TO ADMIN'; };
+    onAuthStateChanged(auth, async user => {
+      if (!user) return;
+      const profile = await getDoc(doc(db, 'users', user.uid));
+      const role = profile.exists() ? profile.data().role : null;
+      if (role === 'admin' || role === 'superadmin') window.location.replace('dashboard.html');
+      else await auth.signOut();
     });
-
-    // Admin Login Handler (Firebase Auth)
-    document.getElementById('admin-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('admin-email').value;
-      const password = document.getElementById('admin-password').value;
-      const btn = document.getElementById('admin-btn');
-      const errorBox = document.getElementById('error-box');
-
-      btn.innerText = "Authenticating...";
-      errorBox.classList.add('hidden');
-
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      btn.disabled = true; btn.textContent = 'AUTHENTICATING...'; error.classList.add('hidden');
       try {
-        await signInWithEmailAndPassword(auth, email, password);
-        localStorage.setItem('isAdminLoggedIn', 'true');
-        window.location.href = 'dashboard.html'; // অ্যাডমিন সফলভাবে ড্যাশবোর্ডে যাবে
-      } catch (error) {
-        console.error("Login error: ", error);
-        errorBox.classList.remove('hidden');
-        btn.innerText = "Login to Admin Panel";
-      }
+        const credential = await signInWithEmailAndPassword(auth, document.getElementById('admin-email').value.trim(), document.getElementById('admin-password').value);
+        const profile = await getDoc(doc(db, 'users', credential.user.uid));
+        const role = profile.exists() ? profile.data().role : null;
+        if (role !== 'admin' && role !== 'superadmin') { await auth.signOut(); return showError('This account is not authorized for the Admin Panel.'); }
+        window.location.replace('dashboard.html');
+      } catch (e) { showError('Invalid admin credentials or Firebase configuration.'); console.error(e); }
     });
   </script>
 </body>
